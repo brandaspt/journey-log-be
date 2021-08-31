@@ -10,6 +10,7 @@ import photosRouter from "./services/photos/routes.js"
 import authRouter from "./services/auth/routes.js"
 
 import { corsOptions } from "./settings/cors.js"
+import { errorsMiddleware } from "./errorsMiddlewares.js"
 
 const app = express()
 
@@ -24,6 +25,9 @@ app.use("/users", usersRouter)
 app.use("/posts", postsRouter)
 app.use("/photos", photosRouter)
 app.use("/auth", authRouter)
+
+// ERRORS MIDDLEWARE
+app.use(errorsMiddleware)
 
 mongoose.set("returnOriginal", false)
 mongoose

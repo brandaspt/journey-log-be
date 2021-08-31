@@ -34,4 +34,15 @@ UserSchema.pre("save", async function (next) {
   next()
 })
 
+UserSchema.statics.checkCredentials = async function (email, password) {
+  const user = await this.findOne({ email })
+  const isMatch = await bcrypt.compare(password, user.password)
+  if (isMatch) return user
+}
+
+UserSchema.methods.toJSON = function () {
+  const { name, surname, email, avatar, bio, _id } = this.toObject()
+  return { name, surname, email, avatar, bio, _id }
+}
+
 export default model("User", UserSchema)
