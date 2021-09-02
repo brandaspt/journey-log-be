@@ -31,6 +31,9 @@ const UserSchema = new Schema(
 
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) this.password = await bcrypt.hash(this.password, 10)
+  // if ((this.isModified("name surname") && (this.avatar.includes("eu.ui-avatars.com/api") || !this.avatar)) {
+  //   this.avatar = `https://eu.ui-avatars.com/api/?name=${this.name}+${this.surname}`
+  // }
   next()
 })
 

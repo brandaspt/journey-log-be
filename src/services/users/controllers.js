@@ -4,7 +4,7 @@ import createError from "http-errors"
 // Model
 import UserModel from "./model.js"
 
-import { getTokens } from "../../auth/tools.js"
+import { getTokens } from "../auth/tools.js"
 
 export const registerUser = async (req, res, next) => {
   try {

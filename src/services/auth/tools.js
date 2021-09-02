@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import UserModel from "../services/users/model.js"
+import UserModel from "../users/model.js"
 
 const generateJWT = payload =>
   new Promise((resolve, reject) =>
