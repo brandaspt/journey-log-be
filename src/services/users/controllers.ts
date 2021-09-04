@@ -2,19 +2,22 @@
 import createError from "http-errors"
 
 // Model
-import UserModel from "./model.js"
+import UserModel from "./model"
 
-import { getTokens } from "../../auth/tools.js"
+import { getTokens } from "../auth/tools"
+import { TController } from "src/typings/controllers"
 
-export const registerUser = async (req, res, next) => {
+export const registerUser: TController = async (req, res, next) => {
+  const newUser = { ...req.body }
+  newUser.avatar = `https://ui-avatars.com/api/?name=${req.body.name}+${req.body.surname}`
   try {
-    res.status(201).json(await new UserModel(req.body).save())
+    res.status(201).json(await new UserModel(newUser).save())
   } catch (error) {
-    next(createError(400, error))
+    next(createError(400, error as Error))
   }
 }
 
-export const loginUser = async (req, res, next) => {
+export const loginUser: TController = async (req, res, next) => {
   const { email, password } = req.body
   try {
     const user = await UserModel.checkCredentials(email, password)
@@ -32,6 +35,6 @@ export const loginUser = async (req, res, next) => {
     })
     res.status(204).send()
   } catch (error) {
-    next(createError(500, error))
+    next(createError(500, error as Error))
   }
 }
