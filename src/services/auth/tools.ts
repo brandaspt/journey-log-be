@@ -1,11 +1,7 @@
 import jwt from "jsonwebtoken"
-<<<<<<< HEAD:src/services/auth/tools.js
-import UserModel from "../users/model.js"
-=======
 import { IJWTPayload } from "src/typings/jwt"
 import { IUserDocument } from "src/typings/users"
 import UserModel from "../users/model"
->>>>>>> typescript:src/services/auth/tools.ts
 
 const generateJWT = (payload: IJWTPayload) =>
   new Promise((resolve, reject) =>

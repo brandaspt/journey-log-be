@@ -1,12 +1,12 @@
 import mongoose from "mongoose"
 import validator from "validator"
 import bcrypt from "bcrypt"
+import { IUserDocument, IUserModel } from "src/typings/users"
 
 const { isEmail } = validator
-
 const { Schema, model } = mongoose
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<IUserDocument, IUserModel>(
   {
     name: {
       type: String,
@@ -25,21 +25,20 @@ const UserSchema = new Schema(
     password: String,
     avatar: String,
     bio: String,
+    refreshToken: String,
   },
   { timestamps: true }
 )
 
 UserSchema.pre("save", async function (next) {
-  if (this.isModified("password")) this.password = await bcrypt.hash(this.password, 10)
-  // if ((this.isModified("name surname") && (this.avatar.includes("eu.ui-avatars.com/api") || !this.avatar)) {
-  //   this.avatar = `https://eu.ui-avatars.com/api/?name=${this.name}+${this.surname}`
-  // }
+  if (this.isModified("password")) this.password = await bcrypt.hash(this.password!, 10)
   next()
 })
 
 UserSchema.statics.checkCredentials = async function (email, password) {
   const user = await this.findOne({ email })
-  const isMatch = await bcrypt.compare(password, user.password)
+  if (!user) return
+  const isMatch = await bcrypt.compare(password, user.password!)
   if (isMatch) return user
 }
 
@@ -48,4 +47,4 @@ UserSchema.methods.toJSON = function () {
   return { name, surname, email, avatar, bio, _id }
 }
 
-export default model("User", UserSchema)
+export default model<IUserDocument, IUserModel>("User", UserSchema)

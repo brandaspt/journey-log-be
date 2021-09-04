@@ -1,4 +1,6 @@
-export const errorsMiddleware = (err, req, res, next) => {
+import { TErrorMiddlewareFunction } from "./typings/middlewares"
+
+export const errorsMiddleware: TErrorMiddlewareFunction = (err, req, res, next) => {
   const errStatus = [400, 401, 403, 404]
   if (!errStatus.includes(err.status)) {
     console.log(err)
