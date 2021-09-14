@@ -7,5 +7,7 @@ export interface IPhoto {
   lat: number
   long: number
   dateTaken?: Date
-  postId: Schema.Types.ObjectId
+  postId?: Schema.Types.ObjectId
+  userId: Schema.Types.ObjectId
+  url: string
 }

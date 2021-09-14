@@ -11,11 +11,24 @@ const PhotoSchema = new Schema<IPhoto>(
     dateTaken: Date,
     postId: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Post",
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    url: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }
 )
+
+PhotoSchema.methods.toJSON = function () {
+  const photo = this.toObject()
+  delete photo.__v
+  return photo
+}
 
 export default model<IPhoto>("Photo", PhotoSchema)

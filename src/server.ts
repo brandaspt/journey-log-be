@@ -9,6 +9,7 @@ import photosRouter from "./services/photos/routes"
 import authRouter from "./services/auth/routes"
 
 import { corsOptions } from "./settings/cors"
+import cookieParser from "cookie-parser"
 import { errorsMiddleware } from "./errorsMiddlewares"
 
 const app = express()
@@ -16,6 +17,7 @@ const app = express()
 // MIDDLEWARES
 app.use(express.json())
 app.use(cors(corsOptions))
+app.use(cookieParser())
 
 // ENDPOINTS
 app.use("/users", usersRouter)

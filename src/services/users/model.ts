@@ -43,8 +43,11 @@ UserSchema.statics.checkCredentials = async function (email, password) {
 }
 
 UserSchema.methods.toJSON = function () {
-  const { name, surname, email, avatar, bio, _id } = this.toObject()
-  return { name, surname, email, avatar, bio, _id }
+  const user = this.toObject()
+  delete user.password
+  delete user.__v
+  delete user.refreshToken
+  return user
 }
 
 export default model<IUserDocument, IUserModel>("User", UserSchema)
