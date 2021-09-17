@@ -9,7 +9,6 @@ export const JWTAuthMiddleware: TController = async (req, res, next) => {
   const token = req.cookies.accessToken
   try {
     const decodedToken = (await verifyJWT(token)) as JwtPayload
-    console.log(decodedToken)
     const user = await UserModel.findById(decodedToken._id)
     if (!user) return next(createError(404, "User not found."))
     req.user = user

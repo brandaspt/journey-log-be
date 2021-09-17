@@ -26,6 +26,7 @@ const UserSchema = new Schema<IUserDocument, IUserModel>(
     avatar: String,
     bio: String,
     refreshToken: String,
+    googleId: String,
   },
   { timestamps: true }
 )
