@@ -1,9 +1,7 @@
-import mongoose, { Schema } from "mongoose"
-
-const { Schema } = mongoose
+import { Schema, Document } from "mongoose"
 
 export interface IPhoto {
-  description?: string
+  likes: Schema.Types.ObjectId[]
   lat: number
   long: number
   dateTaken?: Date
@@ -11,3 +9,5 @@ export interface IPhoto {
   userId: Schema.Types.ObjectId
   url: string
 }
+
+export interface IPhotoDocument extends Document, IPhoto {}

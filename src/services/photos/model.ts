@@ -5,7 +5,7 @@ const { Schema, model } = mongoose
 
 const PhotoSchema = new Schema<IPhoto>(
   {
-    description: String,
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     lat: { type: Number, required: true },
     long: { type: Number, required: true },
     dateTaken: Date,
