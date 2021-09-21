@@ -1,12 +1,14 @@
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
 import multer from "multer"
+import { IUserDocument } from "src/typings/users"
 
 const photosStorage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
+    const user = req.user as IUserDocument
     return {
-      folder: `JourneyLog/Photos/${req.user?._id}`,
+      folder: `JourneyLog/Photos/${user._id}`,
     }
   },
 })

@@ -1,12 +1,14 @@
-import { Schema, Document } from "mongoose"
+import { Schema, Document, Types } from "mongoose"
 
 export interface IPost {
   title: string
-  likes: Schema.Types.ObjectId[]
+  likes?: Schema.Types.ObjectId[]
+  photos: Schema.Types.ObjectId[]
+  isPrivate: boolean
   lat: number
-  long: number
-  userId: Schema.Types.ObjectId
-  description: string
+  lng: number
+  userId: Types.ObjectId
+  description?: string
 }
 
 export interface IPostDocument extends Document, IPost {}

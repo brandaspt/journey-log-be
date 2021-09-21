@@ -9,9 +9,11 @@ const PostSchema = new Schema<IPost>(
       type: String,
       required: true,
     },
+    isPrivate: { type: Boolean, required: true },
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    photos: [{ type: Schema.Types.ObjectId, ref: "Photo" }],
     lat: { type: Number, required: true },
-    long: { type: Number, required: true },
+    lng: { type: Number, required: true },
     userId: {
       type: Schema.Types.ObjectId,
       required: true,

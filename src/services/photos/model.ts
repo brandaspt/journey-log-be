@@ -7,7 +7,7 @@ const PhotoSchema = new Schema<IPhoto>(
   {
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     lat: { type: Number, required: true },
-    long: { type: Number, required: true },
+    lng: { type: Number, required: true },
     dateTaken: Date,
     postId: {
       type: Schema.Types.ObjectId,
