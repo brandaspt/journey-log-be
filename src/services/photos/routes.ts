@@ -5,6 +5,6 @@ import * as controllers from "./controllers"
 
 const router = Router()
 
-router.post("/upload", JWTAuthMiddleware, photosParser.array("photos"), controllers.uploadPhotos)
+router.post("/", JWTAuthMiddleware, photosParser.array("photos"), controllers.uploadPhotos)
 
 export default router

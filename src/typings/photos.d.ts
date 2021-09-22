@@ -8,6 +8,7 @@ export interface IPhoto {
   postId?: Schema.Types.ObjectId
   userId: Schema.Types.ObjectId
   url: string
+  isPrivate: boolean
 }
 
 export interface IPhotoDocument extends Document, IPhoto {}

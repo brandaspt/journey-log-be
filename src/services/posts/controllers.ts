@@ -53,6 +53,7 @@ export const newPost: TController = async (req, res, next) => {
       postId: createdPost._id,
       userId: user._id,
       url: photos[i].path,
+      isPrivate: textFields.isPrivate ? true : false,
     }
     newPhotosArr.push(newPhoto)
   }

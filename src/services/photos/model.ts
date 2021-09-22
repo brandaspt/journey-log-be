@@ -21,6 +21,7 @@ const PhotoSchema = new Schema<IPhoto>(
       type: String,
       required: true,
     },
+    isPrivate: { type: Boolean, required: true },
   },
   { timestamps: true }
 )
