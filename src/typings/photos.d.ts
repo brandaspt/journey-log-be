@@ -6,7 +6,7 @@ export interface IPhoto {
   lng: number
   dateTaken?: Date
   postId?: Schema.Types.ObjectId
-  userId: Schema.Types.ObjectId
+  userId: Types.ObjectId
   url: string
   isPrivate: boolean
 }

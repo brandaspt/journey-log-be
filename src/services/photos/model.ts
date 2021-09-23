@@ -16,6 +16,7 @@ const PhotoSchema = new Schema<IPhoto>(
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     url: {
       type: String,
