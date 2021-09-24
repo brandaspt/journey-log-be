@@ -34,18 +34,21 @@ export const uploadPhotos: TController = async (req, res, next) => {
   const user = req.user as IUserDocument
   const photos = req.files as Express.Multer.File[]
   const textFields = req.body
+  console.log(photos)
+  console.log(textFields)
   const photosArr = photos.reduce((acc: IPhoto[], curr, idx) => {
     return [
       ...acc,
       {
         url: curr.path,
         userId: user._id,
-        lat: textFields.lat[idx],
-        lng: textFields.lng[idx],
-        isPrivate: textFields.isPrivate[idx] ? true : false,
+        lat: photos.length === 1 ? textFields.lat : textFields.lat[idx],
+        lng: photos.length === 1 ? textFields.lng : textFields.lng[idx],
+        isPrivate: photos.length === 1 ? (textFields.isPrivate ? true : false) : textFields.isPrivate[idx] ? true : false,
       },
     ]
   }, [])
+  console.log(photosArr)
   try {
     const savedPhotos = await PhotoModel.create(photosArr)
     res.status(201).json(savedPhotos)
