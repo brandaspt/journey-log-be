@@ -34,8 +34,6 @@ export const uploadPhotos: TController = async (req, res, next) => {
   const user = req.user as IUserDocument
   const photos = req.files as Express.Multer.File[]
   const textFields = req.body
-  console.log(photos)
-  console.log(textFields)
   const photosArr = photos.reduce((acc: IPhoto[], curr, idx) => {
     return [
       ...acc,
@@ -48,7 +46,6 @@ export const uploadPhotos: TController = async (req, res, next) => {
       },
     ]
   }, [])
-  console.log(photosArr)
   try {
     const savedPhotos = await PhotoModel.create(photosArr)
     res.status(201).json(savedPhotos)
