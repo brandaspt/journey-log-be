@@ -18,6 +18,8 @@ import googleStrategy from "./services/auth/google"
 const app = express()
 passport.use("google", googleStrategy)
 
+console.log(process.env.NODE_ENV)
+
 // MIDDLEWARES
 app.use(express.json())
 app.use(cors(corsOptions))
