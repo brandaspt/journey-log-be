@@ -59,7 +59,7 @@ export const googleRedirect: TController = async (req, res, next) => {
       // sameSite: "none",
     })
     res.cookie("refreshToken", user.tokens.refreshToken, { httpOnly: true })
-    res.redirect(`http://localhost:3000/dashboard`)
+    res.redirect(`${process.env.FRONTEND_DEV_URL || process.env.FRONTEND_PROD_URL}/dashboard`)
   } catch (error) {
     next(error)
   }
