@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node-dev -r dotenv/config --respawn --pretty --transpile-only ./src",
-    "start": "node ./build"
+    "dev": "ts-node-dev -r dotenv/config --respawn --pretty --transpile-only src/index.ts",
+    "start": "node build/index.js"
   },
   "keywords": [],
   "author": "",
