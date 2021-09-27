@@ -7,5 +7,6 @@ const router = Router()
 
 router.get("/me", JWTAuthMiddleware, controllers.getMe)
 router.get("/search", JWTAuthMiddleware, controllers.searchUsers)
+router.post("/toggleFollow", JWTAuthMiddleware, controllers.toggleFollowUser)
 
 export default router

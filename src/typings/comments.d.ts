@@ -2,9 +2,9 @@ import { Schema, Document } from "mongoose"
 
 export interface IComment {
   comment: string
-  postId?: Schema.Types.ObjectId
-  photoId?: Schema.Types.ObjectId
-  userId: Schema.Types.ObjectId
+  postId?: ObjectId
+  photoId?: ObjectId
+  userId: ObjectId
 }
 
 export interface ICommentDocument extends Document, IComment {}

@@ -1,12 +1,12 @@
 import { Schema, Document } from "mongoose"
 
 export interface IPhoto {
-  likes?: Schema.Types.ObjectId[]
+  likes?: ObjectId[]
   lat: number
   lng: number
   dateTaken?: Date
-  postId?: Schema.Types.ObjectId
-  userId: Types.ObjectId
+  postId?: ObjectId
+  userId: ObjectId
   url: string
   isPrivate: boolean
 }

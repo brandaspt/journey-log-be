@@ -1,10 +1,10 @@
-import { Document, Model } from "mongoose"
+import { Document, Model, ObjectId } from "mongoose"
 export interface IUser {
   name: string
   surname: string
   email: string
-  // followers?: Schema.Types.ObjectId[]
-  // following?: Schema.Types.ObjectId[]
+  followers: ObjectId[]
+  following: ObjectId[]
   password?: string
   avatar?: string
   bio?: string
