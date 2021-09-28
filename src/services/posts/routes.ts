@@ -5,8 +5,7 @@ import * as controllers from "./controllers"
 
 const router = Router()
 
-router.get("/me", JWTAuthMiddleware, controllers.getMyPosts)
-router.get("/:userId", controllers.getUserPublicPosts)
+router.get("/:postId", controllers.getPostById)
 router.post("/", JWTAuthMiddleware, photosParser.array("photos"), controllers.newPost)
 
 export default router

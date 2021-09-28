@@ -48,7 +48,7 @@ export const loginUser: TController = async (req, res, next) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     })
-    res.status(204).send()
+    res.sendStatus(204)
   } catch (error) {
     next(createError(500, error as Error))
   }

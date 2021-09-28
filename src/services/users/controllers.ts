@@ -1,10 +1,36 @@
-import { TController } from "src/typings/controllers"
 import createError from "http-errors"
+import mongoose from "mongoose"
 import UserModel from "./model"
+import PostModel from "../posts/model"
+import { TController } from "src/typings/controllers"
 import { IUserDocument } from "src/typings/users"
 
 export const getMe: TController = async (req, res, next) => {
   res.json(req.user)
+}
+
+export const getUserPublicPosts: TController = async (req, res, next) => {
+  const userId = new mongoose.Types.ObjectId(req.params.userId)
+
+  try {
+    const posts = await PostModel.find({ userId, isPrivate: false })
+      .populate({ path: "photos", select: "_id url" })
+      .populate({ path: "userId", select: "avatar name surname" })
+    res.json(posts)
+  } catch (error) {
+    next(createError(500, error as Error))
+  }
+}
+export const getMyPosts: TController = async (req, res, next) => {
+  const me = req.user as IUserDocument
+  try {
+    const myPosts = await PostModel.find({ userId: me._id })
+      .populate({ path: "photos", select: "_id url" })
+      .populate({ path: "userId", select: "avatar name surname" })
+    res.json(myPosts)
+  } catch (error) {
+    next(createError(500, error as Error))
+  }
 }
 
 export const searchUsers: TController = async (req, res, next) => {

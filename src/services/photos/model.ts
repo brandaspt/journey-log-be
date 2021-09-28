@@ -32,5 +32,9 @@ PhotoSchema.methods.toJSON = function () {
   delete photo.__v
   return photo
 }
+PhotoSchema.pre("findOneAndDelete", { document: true }, async function (next) {
+  console.log(this)
+  next()
+})
 
 export default model<IPhoto>("Photo", PhotoSchema)
