@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { deleteFromCloudinary } from "../../settings/tools"
 import { IPhoto } from "src/typings/photos"
 
 const { Schema, model } = mongoose
@@ -32,8 +33,9 @@ PhotoSchema.methods.toJSON = function () {
   delete photo.__v
   return photo
 }
-PhotoSchema.pre("findOneAndDelete", { document: true }, async function (next) {
-  console.log(this)
+PhotoSchema.pre("findOneAndDelete", async function (next) {
+  const doc = (await this.model.findOne(this.getFilter())) as IPhoto
+  if (doc) await deleteFromCloudinary(doc.url, "Photos")
   next()
 })
 

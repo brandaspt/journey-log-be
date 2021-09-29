@@ -6,6 +6,7 @@ import { IPhoto } from "src/typings/photos"
 import { IUserDocument } from "src/typings/users"
 import { TController } from "../../typings/controllers"
 import { deleteFromCloudinary } from "../../settings/tools"
+import { IPostDocument } from "src/typings/posts"
 
 export const getMyPhotos: TController = async (req, res, next) => {
   const me = req.user as IUserDocument
@@ -61,19 +62,18 @@ export const deletePhoto: TController = async (req, res, next) => {
   const me = req.user as IUserDocument
   const photoId = req.params.photoId
   try {
-    const deletedStandalonePhoto = await PhotoModel.findOneAndDelete({ userId: me._id, _id: photoId, postId: undefined })
-    if (deletedStandalonePhoto) {
-      await deleteFromCloudinary(deletedStandalonePhoto.url, "Photos")
-      res.json({ message: "Deleted standalone photo ", photoId: deletedStandalonePhoto?._id })
-    } else {
-      const deletedPostPhoto = await PhotoModel.findOneAndDelete({ userId: me._id, _id: photoId, postId: { $not: { $eq: undefined } } })
-      if (deletedPostPhoto) await deleteFromCloudinary(deletedPostPhoto.url, "Photos")
-      else return next(createError(404, "Photo not found"))
-      const deletedPost = await PostModel.findOneAndDelete({ userId: me._id, _id: deletedPostPhoto.postId, photos: { $size: 1 } })
-      if (deletedPost) res.json({ message: "Deleted post photo and post", photoId: deletedPostPhoto._id, postId: deletedPost?._id })
-      else {
-        await PostModel.findOneAndUpdate({ userId: me._id, _id: deletedPostPhoto.postId }, { $pull: { photos: photoId } })
-        res.json({ message: "Deleted post photo and updated post", photoId: deletedPostPhoto._id, postId: deletedPostPhoto.postId })
+    const deletedPhoto = await PhotoModel.findOneAndDelete({ userId: me._id, _id: photoId }).populate("postId")
+    if (!deletedPhoto) return next(createError(404, "Photo not found"))
+    if (!deletedPhoto.postId) res.json({ message: "Deleted standalone photo ", photoId })
+    else {
+      const post = deletedPhoto.postId as IPostDocument
+      const postId = post._id
+      if (post.photos.length === 1) {
+        await PostModel.findByIdAndDelete(postId)
+        res.json({ message: "Deleted photo and post", photoId, postId })
+      } else {
+        await PostModel.findByIdAndUpdate(postId, { $pull: { photos: photoId } })
+        res.json({ message: "Deleted photo and updated post", photoId, postId })
       }
     }
   } catch (error) {

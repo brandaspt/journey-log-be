@@ -1,4 +1,5 @@
 import { Schema, Document, Types } from "mongoose"
+import { IPhotoDocument } from "./photos"
 
 export interface IPost {
   title: string

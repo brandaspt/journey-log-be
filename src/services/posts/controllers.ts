@@ -5,6 +5,7 @@ import PostModel from "./model"
 import PhotoModel from "../photos/model"
 import { IPhoto } from "src/typings/photos"
 import { IPost } from "src/typings/posts"
+import { deleteFromCloudinary } from "../../settings/tools"
 
 export const getPostById: TController = async (req, res, next) => {
   const postId = req.params.postId
@@ -53,5 +54,19 @@ export const newPost: TController = async (req, res, next) => {
     res.status(201).json(savedPost)
   } catch (error) {
     next(createError(400, error as Error))
+  }
+}
+
+export const deletePost: TController = async (req, res, next) => {
+  const user = req.user as IUserDocument
+  const userId = user._id
+  const postId = req.params.postId
+
+  try {
+    const post = await PostModel.findOneAndDelete({ userId, _id: postId })
+    if (!post) return next(createError(404, "Post not found"))
+    res.sendStatus(200)
+  } catch (error) {
+    next(createError(500, error as Error))
   }
 }

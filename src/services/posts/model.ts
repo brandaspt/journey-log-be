@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
-import { IPost } from "src/typings/posts"
+import { IPost, IPostDocument } from "src/typings/posts"
+import PhotoModel from "../photos/model"
 
 const { Schema, model } = mongoose
 
@@ -23,5 +24,11 @@ const PostSchema = new Schema<IPost>(
   },
   { timestamps: true }
 )
+
+PostSchema.pre("findOneAndDelete", async function (next) {
+  const doc = (await this.model.findOne(this.getFilter())) as IPostDocument
+  if (doc) await Promise.all(doc.photos.map(photo => PhotoModel.findByIdAndDelete(photo._id)))
+  next()
+})
 
 export default model<IPost>("Post", PostSchema)
