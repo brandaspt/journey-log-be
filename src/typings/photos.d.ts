@@ -8,6 +8,7 @@ export interface IPhoto {
   postId?: ObjectId
   userId: ObjectId
   url: string
+  cloudinaryPublicId: string
   isPrivate: boolean
 }
 

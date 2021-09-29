@@ -42,6 +42,7 @@ export const newPost: TController = async (req, res, next) => {
       postId: createdPost._id,
       userId: user._id,
       url: photos[i].path,
+      cloudinaryPublicId: photos[i].filename,
       isPrivate: textFields.isPrivate ? true : false,
     }
     newPhotosArr.push(newPhoto)
@@ -52,6 +53,52 @@ export const newPost: TController = async (req, res, next) => {
     createdPost.photos = photoIds
     const savedPost = await createdPost.save()
     res.status(201).json(savedPost)
+  } catch (error) {
+    next(createError(400, error as Error))
+  }
+}
+
+export const addPhotos: TController = async (req, res, next) => {
+  const user = req.user as IUserDocument
+  const userId = user._id
+  const postId = req.params.postId
+
+  try {
+    const post = await PostModel.findOne({ _id: postId, userId })
+    if (!post) return next(createError(404, "Post not found"))
+
+    const photos = req.files as Express.Multer.File[]
+    const newPhotosArr: IPhoto[] = []
+    for (let i = 0; i < photos?.length!; i++) {
+      const newPhoto: IPhoto = {
+        lat: post.lat,
+        lng: post.lng,
+        postId,
+        userId,
+        url: photos[i].path,
+        cloudinaryPublicId: photos[i].filename,
+        isPrivate: post.isPrivate,
+      }
+      newPhotosArr.push(newPhoto)
+    }
+    const savedPhotos = await PhotoModel.create(newPhotosArr)
+    const photoIds = savedPhotos.map(photo => photo._id)
+    post.photos = [...post.photos, ...photoIds]
+    await post.save()
+    res.json(post)
+  } catch (error) {
+    next(createError(500, error as Error))
+  }
+}
+
+export const editPost: TController = async (req, res, next) => {
+  const user = req.user as IUserDocument
+  const userId = user._id
+  const postId = req.params.postId
+
+  try {
+    const updatedPost = await PostModel.findOneAndUpdate({ userId, _id: postId }, req.body)
+    res.json(updatedPost)
   } catch (error) {
     next(createError(400, error as Error))
   }

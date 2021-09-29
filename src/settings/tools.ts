@@ -8,9 +8,7 @@ const cloudinaryDestroyAsync = (publicId: string) =>
     })
   )
 
-export const deleteFromCloudinary = async (url: string, folder: string) => {
-  const urlArr = url.split(`JourneyLog/${folder}`)
-  const publicId = `JourneyLog/${folder}${urlArr[1].slice(0, -4)}`
+export const deleteFromCloudinary = async (publicId: string) => {
   try {
     const result = await cloudinaryDestroyAsync(publicId)
     console.log(result)

@@ -19,6 +19,10 @@ const PhotoSchema = new Schema<IPhoto>(
       ref: "User",
       required: true,
     },
+    cloudinaryPublicId: {
+      type: String,
+      required: true,
+    },
     url: {
       type: String,
       required: true,
@@ -35,7 +39,7 @@ PhotoSchema.methods.toJSON = function () {
 }
 PhotoSchema.pre("findOneAndDelete", async function (next) {
   const doc = (await this.model.findOne(this.getFilter())) as IPhoto
-  if (doc) await deleteFromCloudinary(doc.url, "Photos")
+  if (doc) await deleteFromCloudinary(doc.cloudinaryPublicId)
   next()
 })
 

@@ -43,6 +43,7 @@ export const uploadPhotos: TController = async (req, res, next) => {
       ...acc,
       {
         url: curr.path,
+        cloudinaryPublicId: curr.filename,
         userId: user._id,
         lat: photos.length === 1 ? textFields.lat : textFields.lat[idx],
         lng: photos.length === 1 ? textFields.lng : textFields.lng[idx],
