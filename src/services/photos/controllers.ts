@@ -1,37 +1,10 @@
 import createError from "http-errors"
-import mongoose from "mongoose"
 import PhotoModel from "./model"
 import PostModel from "../posts/model"
 import { IPhoto } from "src/typings/photos"
 import { IUserDocument } from "src/typings/users"
 import { TController } from "../../typings/controllers"
-import { deleteFromCloudinary } from "../../settings/tools"
 import { IPostDocument } from "src/typings/posts"
-
-export const getMyPhotos: TController = async (req, res, next) => {
-  const me = req.user as IUserDocument
-  try {
-    const myPhotos = await PhotoModel.find({ userId: me._id, postId: undefined }).populate({
-      path: "userId",
-      select: "avatar name surname",
-    })
-    res.json(myPhotos)
-  } catch (error) {
-    next(createError(500, error as Error))
-  }
-}
-export const getUserPublicPhotos: TController = async (req, res, next) => {
-  const userId = new mongoose.Types.ObjectId(req.params.userId)
-  try {
-    const photos = await PhotoModel.find({ userId, isPrivate: false, postId: undefined }).populate({
-      path: "userId",
-      select: "avatar name surname",
-    })
-    res.json(photos)
-  } catch (error) {
-    next(createError(500, error as Error))
-  }
-}
 
 export const uploadPhotos: TController = async (req, res, next) => {
   const user = req.user as IUserDocument
