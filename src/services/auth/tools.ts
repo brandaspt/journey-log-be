@@ -5,7 +5,7 @@ import UserModel from "../users/model"
 
 const generateJWT = (payload: IJWTPayload) =>
   new Promise((resolve, reject) =>
-    jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "2w" }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "15m" }, (err, token) => {
       if (err) reject(err)
       resolve(token)
     })

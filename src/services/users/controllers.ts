@@ -32,36 +32,20 @@ export const getMyPhotos: TController = async (req, res, next) => {
     next(createError(500, error as Error))
   }
 }
-export const getUserPublicPosts: TController = async (req, res, next) => {
-  const userId = req.params.userId
-
-  try {
-    const posts = await PostModel.find({ userId, isPrivate: false })
-      .populate({ path: "photos", select: "_id url" })
-      .populate({ path: "userId", select: "avatar name surname" })
-    res.json(posts)
-  } catch (error) {
-    next(createError(500, error as Error))
-  }
-}
-export const getUserPublicPhotos: TController = async (req, res, next) => {
-  const userId = new mongoose.Types.ObjectId(req.params.userId)
-  try {
-    const photos = await PhotoModel.find({ userId, isPrivate: false, postId: undefined }).populate({
-      path: "userId",
-      select: "avatar name surname",
-    })
-    res.json(photos)
-  } catch (error) {
-    next(createError(500, error as Error))
-  }
-}
 export const getUserPublicInfo: TController = async (req, res, next) => {
   const userId = req.params.userId
   try {
-    const userInfo = await UserModel.findById(userId, "name surname avatar")
-    if (!userInfo) return next(createError(404, "User not found."))
-    res.json(userInfo)
+    const publicProfile = await UserModel.findById(userId, "name surname avatar createdAt")
+    if (!publicProfile) return next(createError(404, "User not found."))
+    const publicPhotos = await PhotoModel.find({ userId, isPrivate: false, postId: undefined }).populate({
+      path: "userId",
+      select: "avatar",
+    })
+    const publicPosts = await PostModel.find({ userId, isPrivate: false }).populate({ path: "photos", select: "url" }).populate({
+      path: "userId",
+      select: "avatar",
+    })
+    res.json({ publicProfile, publicPosts, publicPhotos })
   } catch (error) {
     next(createError(500, error as Error))
   }

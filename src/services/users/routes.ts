@@ -9,8 +9,6 @@ router.get("/me", JWTAuthMiddleware, controllers.getMe)
 router.get("/myPosts", JWTAuthMiddleware, controllers.getMyPosts)
 router.get("/myPhotos", JWTAuthMiddleware, controllers.getMyPhotos)
 router.get("/:userId/publicInfo", controllers.getUserPublicInfo)
-router.get("/:userId/publicPosts", controllers.getUserPublicPosts)
-router.get("/:userId/publicPhotos", controllers.getUserPublicPhotos)
 router.get("/search", JWTAuthMiddleware, controllers.searchUsers)
 router.post("/toggleFollow", JWTAuthMiddleware, controllers.toggleFollowUser)
 
