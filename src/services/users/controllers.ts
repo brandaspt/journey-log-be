@@ -99,3 +99,30 @@ export const toggleFollowUser: TController = async (req, res, next) => {
     next(createError(500, error as Error))
   }
 }
+
+export const emailExists: TController = async (req, res, next) => {
+  const { email } = req.body
+  try {
+    const user = await UserModel.findOne({ email })
+    if (user) res.json(true)
+    else res.json(false)
+  } catch (error) {
+    next(createError(500, error as Error))
+  }
+}
+
+export const updateProfile: TController = async (req, res, next) => {
+  const me = req.user as IUserDocument
+  let avatar = me.avatar
+  if (me.avatar?.includes("ui-avatars.com/api")) {
+    if (req.body.name || req.body.surname) {
+      avatar = `https://ui-avatars.com/api/?name=${req.body.name}+${req.body.surname}`
+    }
+  }
+  try {
+    const updated = await me.updateOne({ ...req.body, avatar })
+    res.json(updated)
+  } catch (error) {
+    next(createError(500, error as Error))
+  }
+}

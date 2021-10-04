@@ -11,5 +11,7 @@ router.get("/myPhotos", JWTAuthMiddleware, controllers.getMyPhotos)
 router.get("/:userId/publicInfo", controllers.getUserPublicInfo)
 router.get("/search", JWTAuthMiddleware, controllers.searchUsers)
 router.post("/toggleFollow", JWTAuthMiddleware, controllers.toggleFollowUser)
+router.post("/checkEmail", controllers.emailExists)
+router.put("/updateProfile", JWTAuthMiddleware, controllers.updateProfile)
 
 export default router
