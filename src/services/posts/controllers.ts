@@ -5,7 +5,6 @@ import PostModel from "./model"
 import PhotoModel from "../photos/model"
 import { IPhoto } from "src/typings/photos"
 import { IPost } from "src/typings/posts"
-import { deleteFromCloudinary } from "../../settings/tools"
 
 export const getPostById: TController = async (req, res, next) => {
   const postId = req.params.postId
@@ -13,6 +12,7 @@ export const getPostById: TController = async (req, res, next) => {
     const post = await PostModel.findById(postId)
       .populate({ path: "photos", select: "_id url" })
       .populate({ path: "userId", select: "avatar name surname" })
+      .populate({ path: "comments.userId", select: "avatar name surname" })
     if (!post) return next(createError(404, "Post not found"))
     res.json(post)
   } catch (error) {
@@ -32,6 +32,7 @@ export const newPost: TController = async (req, res, next) => {
     description: textFields.description,
     isPrivate: textFields.isPrivate ? true : false,
     photos: [],
+    comments: [],
   }
   const createdPost = new PostModel(newPost)
   const newPhotosArr: IPhoto[] = []
@@ -53,6 +54,25 @@ export const newPost: TController = async (req, res, next) => {
     createdPost.photos = photoIds
     const savedPost = await createdPost.save()
     res.status(201).json(savedPost)
+  } catch (error) {
+    next(createError(400, error as Error))
+  }
+}
+export const addComment: TController = async (req, res, next) => {
+  const user = req.user as IUserDocument
+  const postId = req.params.postId
+  const newComment = {
+    comment: req.body.comment,
+    userId: user._id,
+    createdAt: new Date(),
+  }
+  try {
+    const post = await PostModel.findById(postId)
+    if (!post) return next(createError(404, "Post not found"))
+    post.comments.push(newComment)
+    const savedPost = await post.save()
+    res.json(savedPost)
+    // const updatedPost = await PostModel.findByIdAndUpdate(postId, {$push:{comments:newComment}})
   } catch (error) {
     next(createError(400, error as Error))
   }

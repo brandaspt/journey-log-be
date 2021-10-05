@@ -41,10 +41,13 @@ export const getUserPublicInfo: TController = async (req, res, next) => {
       path: "userId",
       select: "avatar",
     })
-    const publicPosts = await PostModel.find({ userId, isPrivate: false }).populate({ path: "photos", select: "url" }).populate({
-      path: "userId",
-      select: "avatar",
-    })
+    const publicPosts = await PostModel.find({ userId, isPrivate: false })
+      .populate({ path: "photos", select: "url" })
+      .populate({
+        path: "userId",
+        select: "avatar",
+      })
+      .populate({ path: "comments.userId", select: "avatar name surname" })
     res.json({ publicProfile, publicPosts, publicPhotos })
   } catch (error) {
     next(createError(500, error as Error))

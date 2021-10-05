@@ -7,6 +7,7 @@ const router = Router()
 
 router.get("/:postId", controllers.getPostById)
 router.post("/", JWTAuthMiddleware, photosParser.array("photos"), controllers.newPost)
+router.post("/:postId/comments", JWTAuthMiddleware, controllers.addComment)
 router.put("/:postId/addPhotos", JWTAuthMiddleware, photosParser.array("photos"), controllers.addPhotos)
 router.put("/:postId", JWTAuthMiddleware, controllers.editPost)
 router.delete("/:postId", JWTAuthMiddleware, controllers.deletePost)

@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import { IPost, IPostDocument } from "src/typings/posts"
+import CommentSchema from "../comments/model"
 import PhotoModel from "../photos/model"
 
 const { Schema, model } = mongoose
@@ -13,6 +14,7 @@ const PostSchema = new Schema<IPost>(
     isPrivate: { type: Boolean, required: true },
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     photos: [{ type: Schema.Types.ObjectId, ref: "Photo" }],
+    comments: [{ type: CommentSchema }],
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },
     userId: {
