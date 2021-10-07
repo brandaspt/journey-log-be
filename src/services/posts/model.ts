@@ -29,7 +29,7 @@ const PostSchema = new Schema<IPost>(
 
 PostSchema.pre("findOneAndDelete", async function (next) {
   const doc = (await this.model.findOne(this.getFilter())) as IPostDocument
-  if (doc) await Promise.all(doc.photos.map(photo => PhotoModel.findByIdAndDelete(photo._id)))
+  if (doc) await Promise.all(doc.photos.map(photo => PhotoModel.findByIdAndDelete(photo)))
   next()
 })
 

@@ -1,4 +1,4 @@
-import { Schema, Document, Types } from "mongoose"
+import { Schema, Document, ObjectId } from "mongoose"
 import { IComment } from "./comments"
 import { IPhotoDocument } from "./photos"
 
