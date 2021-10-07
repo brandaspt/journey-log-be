@@ -129,3 +129,22 @@ export const updateProfile: TController = async (req, res, next) => {
     next(createError(500, error as Error))
   }
 }
+
+export const deleteUser: TController = async (req, res, next) => {
+  const me = req.user as IUserDocument
+  const myId = me._id
+
+  try {
+    const myPosts = await PostModel.find({ userId: myId })
+    const deletedPosts = await Promise.all(myPosts.map(post => PostModel.findByIdAndDelete(post._id)))
+    const myPhotos = await PhotoModel.find({ userId: myId })
+    const deletedPhotos = await Promise.all(myPhotos.map(photo => PhotoModel.findByIdAndDelete(photo._id)))
+    const deletedUser = await UserModel.findByIdAndDelete(myId)
+    await UserModel.updateMany({ followers: myId }, { $pull: { followers: myId } })
+    await UserModel.updateMany({ following: myId }, { $pull: { following: myId } })
+
+    res.json({ deletedPosts, deletedPhotos, deletedUser })
+  } catch (error) {
+    next(createError(500, error as Error))
+  }
+}

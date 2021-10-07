@@ -13,5 +13,6 @@ router.get("/search", JWTAuthMiddleware, controllers.searchUsers)
 router.post("/toggleFollow", JWTAuthMiddleware, controllers.toggleFollowUser)
 router.post("/checkEmail", controllers.emailExists)
 router.put("/updateProfile", JWTAuthMiddleware, controllers.updateProfile)
+router.delete("/deleteUser", JWTAuthMiddleware, controllers.deleteUser)
 
 export default router

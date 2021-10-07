@@ -9,6 +9,7 @@ const photosStorage = new CloudinaryStorage({
     const user = req.user as IUserDocument
     return {
       folder: `JourneyLog/Photos/${user._id}`,
+      transformation: { height: 500, crop: "scale" },
     }
   },
 })

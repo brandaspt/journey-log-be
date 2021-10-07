@@ -35,11 +35,12 @@ const PhotoSchema = new Schema<IPhoto>(
 PhotoSchema.methods.toJSON = function () {
   const photo = this.toObject()
   delete photo.__v
+  delete photo.cloudinaryPublicId
   return photo
 }
 PhotoSchema.pre("findOneAndDelete", async function (next) {
   const doc = (await this.model.findOne(this.getFilter())) as IPhoto
-  if (doc) await deleteFromCloudinary(doc.cloudinaryPublicId)
+  if (doc) await deleteFromCloudinary(doc.cloudinaryPublicId!)
   next()
 })
 

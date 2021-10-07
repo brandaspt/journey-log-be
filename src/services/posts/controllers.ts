@@ -5,6 +5,7 @@ import PostModel from "./model"
 import PhotoModel from "../photos/model"
 import { IPhoto } from "src/typings/photos"
 import { IPost } from "src/typings/posts"
+import { Types } from "mongoose"
 
 export const getPostById: TController = async (req, res, next) => {
   const postId = req.params.postId
@@ -106,6 +107,23 @@ export const addPhotos: TController = async (req, res, next) => {
     post.photos = [...post.photos, ...photoIds]
     await post.save()
     res.json(post)
+  } catch (error) {
+    next(createError(500, error as Error))
+  }
+}
+
+export const toggleLike: TController = async (req, res, next) => {
+  const user = req.user as IUserDocument
+  const userId = user._id
+  const postId = req.params.postId
+  try {
+    const disliked = await PostModel.findOneAndUpdate({ _id: postId, likes: userId }, { $pull: { likes: userId } })
+    if (disliked) res.json({ message: `User ${userId} disliked post ${postId}` })
+    else {
+      const liked = await PostModel.findOneAndUpdate({ _id: postId }, { $push: { likes: userId } })
+      if (liked) res.json({ message: `User ${userId} liked post ${postId}` })
+      else return next(createError(404, "Post not found"))
+    }
   } catch (error) {
     next(createError(500, error as Error))
   }
