@@ -99,8 +99,16 @@ export const logoutUser: TController = async (req, res, next) => {
   const user = req.user as IUserDocument
   try {
     await user.updateOne({ refreshToken: "" })
-    res.clearCookie("accessToken")
-    res.clearCookie("refreshToken")
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    })
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    })
     res.sendStatus(204)
   } catch (error) {
     next(createError(500, error as Error))
