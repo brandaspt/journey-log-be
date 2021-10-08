@@ -1,4 +1,4 @@
-import { Schema, Document, ObjectId } from "mongoose"
+import { Schema, Document, ObjectId, Types } from "mongoose"
 import { IComment } from "./comments"
 import { IPhotoDocument } from "./photos"
 
@@ -10,7 +10,7 @@ export interface IPost {
   isPrivate: boolean
   lat: number
   lng: number
-  userId: ObjectId
+  userId: Types.ObjectId
   description?: string
 }
 

@@ -1,10 +1,11 @@
 import createError from "http-errors"
-import mongoose from "mongoose"
+import { ObjectId } from "mongodb"
 import UserModel from "./model"
 import PostModel from "../posts/model"
 import PhotoModel from "../photos/model"
 import { TController } from "src/typings/controllers"
 import { IUserDocument } from "src/typings/users"
+import { Types } from "mongoose"
 
 export const getMe: TController = async (req, res, next) => {
   res.json(req.user)
@@ -33,7 +34,7 @@ export const getMyPhotos: TController = async (req, res, next) => {
   }
 }
 export const getUserPublicInfo: TController = async (req, res, next) => {
-  const userId = req.params.userId
+  const userId = new Types.ObjectId(req.params.userId)
   try {
     const publicProfile = await UserModel.findById(userId, "name surname avatar createdAt")
     if (!publicProfile) return next(createError(404, "User not found."))
@@ -41,7 +42,7 @@ export const getUserPublicInfo: TController = async (req, res, next) => {
       path: "userId",
       select: "avatar",
     })
-    const publicPosts = await PostModel.find({ userId, isPrivate: false })
+    const publicPosts = await PostModel.find({ userId: userId, isPrivate: false })
       .populate({ path: "photos", select: "url" })
       .populate({
         path: "userId",

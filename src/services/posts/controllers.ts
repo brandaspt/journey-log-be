@@ -94,7 +94,7 @@ export const addPhotos: TController = async (req, res, next) => {
       const newPhoto: IPhoto = {
         lat: post.lat,
         lng: post.lng,
-        postId,
+        postId: new Types.ObjectId(postId),
         userId,
         url: photos[i].path,
         cloudinaryPublicId: photos[i].filename,
