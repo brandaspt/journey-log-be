@@ -7,7 +7,7 @@ import UserModel from "../users/model"
 import { getTokens } from "../auth/tools"
 import { TController } from "src/typings/controllers"
 import { refreshTokens } from "./tools"
-import { IPassportUser } from "src/typings/users"
+import { IPassportUser, IUserDocument } from "src/typings/users"
 
 export const registerUser: TController = async (req, res, next) => {
   const userDetails = { ...req.body }
@@ -96,7 +96,13 @@ export const refresh: TController = async (req, res, next) => {
 }
 
 export const logoutUser: TController = async (req, res, next) => {
-  res.clearCookie("accessToken")
-  res.clearCookie("refreshToken")
-  res.sendStatus(204)
+  const user = req.user as IUserDocument
+  try {
+    await user.updateOne({ refreshToken: "" })
+    res.clearCookie("accessToken")
+    res.clearCookie("refreshToken")
+    res.sendStatus(204)
+  } catch (error) {
+    next(createError(500, error as Error))
+  }
 }
